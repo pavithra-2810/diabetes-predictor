@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: diappred
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn mental.wsgi:application"
+    autoDeploy: true
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: mental.settings

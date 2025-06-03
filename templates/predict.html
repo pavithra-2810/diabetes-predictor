@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Page</title>
+    <style>
+        body {
+            background-image: url("{% static 'pred.jpg' %}");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+        }
+
+        .form-title {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        form {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 10px;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        legend {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+    <script>
+        function togglePregnancyInput() {
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const pregnancyRow = document.getElementById('pregnancyRow');
+            if (gender) {
+                if (gender.value === 'female') {
+                    pregnancyRow.style.display = 'table-row';
+                    document.getElementById('n1').required = true; // Set as required for females
+                } else {
+                    pregnancyRow.style.display = 'none';
+                    document.getElementById('n1').value = ''; // Clear the pregnancies input
+                    document.getElementById('n1').required = false; // Not required for males
+                }
+            }
+        }
+
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const bmiInput = document.getElementById('n6');
+
+            if (weight > 0 && height > 0) {
+                const heightInMeters = height / 100; // Convert height from cm to meters
+                const bmi = weight / (heightInMeters * heightInMeters);
+                bmiInput.value = bmi.toFixed(2); // Set calculated BMI value to BMI input
+            } else {
+                bmiInput.value = ''; // Clear BMI input if invalid input
+            }
+        }
+    </script>
+</head>
+<body>
+    <p class="form-title">PREDICTION FORM</p>
+    <div class="main">
+        <form action="result" method="get">
+            <fieldset>
+                <legend>Prediction Inputs</legend>
+                <table>
+                    <tr>
+                        <td align="right">Gender:</td>
+                        <td align="right">
+                            <label><input type="radio" name="gender" value="male" onclick="togglePregnancyInput()" required> Male</label>
+                            <label><input type="radio" name="gender" value="female" onclick="togglePregnancyInput()"> Female</label>
+                        </td>
+                    </tr>
+                    <tr id="pregnancyRow" style="display: none;">
+                        <td align="right">Pregnancies:</td>
+                        <td align="right"><input type="number" name="n1" id="n1" placeholder="Enter number of pregnancies"></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Glucose:</td>
+                        <td align="right"><input type="text" name="n2" required></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Blood pressure:</td>
+                        <td align="right"><input type="text" name="n3" required></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Insulin:</td>
+                        <td align="right"><input type="text" name="n5" required></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Height (cm):</td>
+                        <td align="right"><input type="text" id="height" oninput="calculateBMI()" placeholder="Enter height" required></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Weight (kg):</td>
+                        <td align="right"><input type="text" id="weight" oninput="calculateBMI()" placeholder="Enter weight" required></td>
+                    </tr>
+                    <tr>
+                        <td align="right">BMI:</td>
+                        <td align="right"><input type="text" name="n6" id="n6" required readonly></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Diabetes pedigree function:</td>
+                        <td align="right"><input type="text" name="n7" required></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Age:</td>
+                        <td align="right"><input type="text" name="n8" required></td>
+                    </tr>
+                </table>
+                <input type="submit" value="Submit">
+            </fieldset>
+        </form>
+    </div>
+</body>
+</html>
