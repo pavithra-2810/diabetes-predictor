@@ -25,9 +25,9 @@ def result(request):
     except ValueError:
         return render(request, 'predict.html', {"result2": "Invalid Input"})
 
-    # ✅ Use correct path to load pred.csv
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # One level only
     file_path = os.path.join(BASE_DIR, 'pred.csv')
+    df = pd.read_csv(file_path)
 
     try:
         df = pd.read_csv(file_path)
